@@ -12,6 +12,7 @@ import '../../reports/screens/reports_screen.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../core/providers/settings_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -26,10 +27,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer3<TransactionProvider, GoalProvider, AuthProvider>(
-        builder: (_, tp, gp, auth, __) => CustomScrollView(
+      body: Consumer4<TransactionProvider, GoalProvider, AuthProvider, SettingsProvider>(
+        builder: (_, tp, gp, auth, settings, __) => CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(child: _buildHeader(tp, auth)),
+            SliverToBoxAdapter(child: _buildHeader(tp, auth, settings)),
             SliverToBoxAdapter(child: _buildQuickActions(context)),
             SliverToBoxAdapter(child: _buildHealthScore(tp)),
             SliverToBoxAdapter(child: _buildAiInsights(tp)),
@@ -43,7 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildHeader(TransactionProvider tp, AuthProvider auth) {
+  Widget _buildHeader(TransactionProvider tp, AuthProvider auth, SettingsProvider settings) {
     final hour = DateTime.now().hour;
     final greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
     final userName = auth.userName ?? 'there';
@@ -88,7 +89,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const Text('Total Balance', style: TextStyle(color: Colors.white70, fontSize: 13)),
                 const SizedBox(height: 6),
                 Text(
-                  _balanceVisible ? Formatters.currency(tp.balance) : 'RM ••••••',
+                  _balanceVisible ? Formatters.currency(tp.balance) : '${settings.currencySymbol} ••••••',
                   style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 12),
@@ -96,14 +97,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     _HeaderStat(
                       label: 'Income',
-                      value: _balanceVisible ? Formatters.currency(tp.totalIncome) : 'RM •••',
+                      value: _balanceVisible ? Formatters.currency(tp.totalIncome) : '${settings.currencySymbol} •••',
                       color: const Color(0xFF55EFC4),
                       icon: Icons.arrow_upward_rounded,
                     ),
                     const SizedBox(width: 32),
                     _HeaderStat(
                       label: 'Expenses',
-                      value: _balanceVisible ? Formatters.currency(tp.totalExpense) : 'RM •••',
+                      value: _balanceVisible ? Formatters.currency(tp.totalExpense) : '${settings.currencySymbol} •••',
                       color: const Color(0xFFFFAB91),
                       icon: Icons.arrow_downward_rounded,
                     ),

@@ -196,6 +196,24 @@ class TransactionProvider extends ChangeNotifier {
     return result;
   }
 
+  // ── Currency Conversion ───────────────────────────────────────────────────
+
+  /// Multiply every transaction amount by [multiplier] (exchange rate).
+  Future<void> convertAllAmounts(double multiplier) async {
+    _transactions = _transactions.map((t) {
+      final map = t.toMap();
+      map['amount'] = (map['amount'] as num).toDouble() * multiplier;
+      return TransactionModel.fromMap(map);
+    }).toList();
+    await _save();
+  }
+
+  /// Erase every transaction (start-fresh after currency switch).
+  Future<void> clearAllTransactions() async {
+    _transactions = [];
+    await _save();
+  }
+
   // ── Fraud ─────────────────────────────────────────────────────────────────
 
   List<TransactionModel> get fraudAlerts => _transactions
