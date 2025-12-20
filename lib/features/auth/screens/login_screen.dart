@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/main_shell.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -31,29 +32,43 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  // ── Navigation ────────────────────────────────────────────────────────────
+
+  void _goHome() {
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const MainShell()),
+      (route) => false,
+    );
+  }
+
   // ── Actions ───────────────────────────────────────────────────────────────
 
   Future<void> _signIn() async {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
-    await context.read<AuthProvider>().signIn(
+    final ok = await context.read<AuthProvider>().signIn(
           _emailCtrl.text.trim(),
           _passwordCtrl.text,
         );
+    if (ok) _goHome();
   }
 
   Future<void> _biometric() async {
     FocusScope.of(context).unfocus();
     final auth = context.read<AuthProvider>();
     final ok   = await auth.authenticateWithBiometrics();
-    if (!ok && mounted && auth.errorMessage != null) {
+    if (ok) {
+      _goHome();
+    } else if (mounted && auth.errorMessage != null) {
       _showSnack(auth.errorMessage!, isError: true);
     }
   }
 
   Future<void> _guestLogin() async {
     FocusScope.of(context).unfocus();
-    await context.read<AuthProvider>().signInAsGuest();
+    final ok = await context.read<AuthProvider>().signInAsGuest();
+    if (ok) _goHome();
   }
 
   void _showSnack(String msg, {bool isError = false}) {
@@ -275,8 +290,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () async {
                     if (!fKey.currentState!.validate()) return;
                     Navigator.pop(ctx);
-                    await auth.signInWithGoogle(
+                    final ok = await auth.signInWithGoogle(
                         emailCtrl.text.trim(), nameCtrl.text.trim());
+                    if (ok) _goHome();
                   },
                   child: const Text('Sign In'),
                 ),

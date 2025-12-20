@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/main_shell.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -45,10 +46,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _emailCtrl.text.trim(),
       _passwordCtrl.text,
     );
-    // Navigate home on success — main.dart Consumer will rebuild but we also
-    // pop the register screen so the back stack is clean.
     if (ok && mounted) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const MainShell()),
+        (route) => false,
+      );
     }
   }
 

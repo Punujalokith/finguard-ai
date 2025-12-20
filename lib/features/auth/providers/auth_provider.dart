@@ -156,7 +156,7 @@ class AuthProvider extends ChangeNotifier {
 
   // ── Guest ─────────────────────────────────────────────────────────────────
 
-  Future<void> signInAsGuest() async {
+  Future<bool> signInAsGuest() async {
     _status = AuthStatus.loading;
     _errorMessage = null;
     notifyListeners();
@@ -165,11 +165,14 @@ class AuthProvider extends ChangeNotifier {
       _userName = 'Guest User';
       _userEmail = 'guest@finguard.ai';
       _status = AuthStatus.authenticated;
+      notifyListeners();
+      return true;
     } catch (e) {
       _status = AuthStatus.error;
       _errorMessage = 'Could not enter guest mode.';
+      notifyListeners();
+      return false;
     }
-    notifyListeners();
   }
 
   // ── Reset Password ────────────────────────────────────────────────────────
