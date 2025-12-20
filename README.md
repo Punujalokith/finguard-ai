@@ -6,14 +6,14 @@
 
 <p align="center">
   <b>A Secure Personal Financial Digital Twin and Intelligent Decision Support Mobile Application</b><br/>
-  Final Year Project — BSc (Hons) in Information Technology
+  BSc (Hons) in Computer Science
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Flutter-3.32-blue?logo=flutter" />
   <img src="https://img.shields.io/badge/Dart-3.8-blue?logo=dart" />
   <img src="https://img.shields.io/badge/Platform-Android-green?logo=android" />
-  <img src="https://img.shields.io/badge/AI-Claude%20claude-sonnet-4-6-purple?logo=anthropic" />
+  <img src="https://img.shields.io/badge/AI-Claude%20Sonnet-purple" />
   <img src="https://img.shields.io/badge/License-MIT-lightgrey" />
 </p>
 
@@ -147,8 +147,7 @@ flutter run
 
 | | |
 |---|---|
-| **Degree** | BSc (Hons) in Information Technology |
-| **Project Type** | Final Year Project (FYP) |
+| **Degree** | BSc (Hons) in Computer Science |
 | **Platform** | Android |
 | **Developer** | Punujalokith |
 | **Development Period** | August 2025 – December 2025 |
