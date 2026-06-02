@@ -205,13 +205,14 @@ class ProfileScreen extends StatelessWidget {
     final toCode   = newCountry.currency;
     final fromFlag = settings.countryFlag;
 
+    // isConverting MUST live outside the builder so setState doesn't reset it
+    bool isConverting = false;
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (dialogCtx) => StatefulBuilder(
         builder: (dialogCtx, setDialogState) {
-          bool isConverting = false;
-
           return AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),

@@ -2,7 +2,8 @@ import 'package:intl/intl.dart';
 
 class Formatters {
   /// Updated by SettingsProvider whenever the user changes country.
-  static String currencySymbol = 'RM';
+  /// Default matches the app's default country (Sri Lanka → Rs).
+  static String currencySymbol = 'Rs';
 
   static String currency(double amount, {String? symbol}) {
     final sym = symbol ?? currencySymbol;
