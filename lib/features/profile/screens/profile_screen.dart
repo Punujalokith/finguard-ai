@@ -181,12 +181,32 @@ class ProfileScreen extends StatelessWidget {
     );
 
     if (selected == null || !context.mounted) return;
-    // Same country — nothing to do
-    if (selected.country == settings.selected.country) return;
+
+    // Same country — confirm to user it's already set
+    if (selected.country == settings.selected.country) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              '${selected.flag} ${selected.country} (${selected.symbol}) is already your currency'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
 
     // No transactions — just switch immediately
     if (tp.transactions.isEmpty) {
       await settings.setCountry(selected);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                '${selected.flag} Switched to ${selected.country} (${selected.currency} ${selected.symbol})'),
+            backgroundColor: AppColors.teal,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
       return;
     }
 
@@ -536,7 +556,8 @@ class ProfileScreen extends StatelessWidget {
                 const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 28),
-          child: Column(
+          child: SingleChildScrollView(
+            child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -613,7 +634,7 @@ class ProfileScreen extends StatelessWidget {
               TextField(
                 controller: keyCtrl,
                 obscureText: true,
-                autofocus: true,
+                autofocus: false,
                 decoration: InputDecoration(
                   labelText: 'API Key',
                   hintText: 'sk-ant-api03-...',
@@ -636,9 +657,10 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
+            ),   // Column
+          ),     // SingleChildScrollView
+        ),       // Container
+      ),         // Padding
     );
   }
 }
